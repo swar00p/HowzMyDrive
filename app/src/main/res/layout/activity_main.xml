@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="false"
+    tools:context="com.hyrulesoft.android.apps.howzmydrive.MainActivity">
+
+    <Button
+        android:id="@+id/HomeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="HOME"
+        android:theme="@style/AppTheme"
+        app:layout_constraintEnd_toEndOf="@+id/WorkAddress"
+        app:layout_constraintStart_toStartOf="@+id/WorkAddress"
+        app:layout_constraintTop_toBottomOf="@+id/HomeAddress" />
+
+    <Button
+        android:id="@+id/WorkButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="62dp"
+        android:text="WORK"
+        android:theme="@style/AppTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/HomeAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="HomeAddress"
+        android:theme="@style/AppTheme"
+        app:layout_constraintEnd_toEndOf="@+id/HomeButton"
+        app:layout_constraintStart_toStartOf="@+id/HomeButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/WorkAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="78dp"
+        android:text="WorkAddress"
+        android:theme="@style/AppTheme"
+        app:layout_constraintBottom_toTopOf="@+id/WorkButton"
+        app:layout_constraintEnd_toEndOf="@+id/WorkButton"
+        app:layout_constraintStart_toStartOf="@+id/WorkButton" />
+
+</android.support.constraint.ConstraintLayout>
