@@ -52,7 +52,8 @@ public class BootReceiver extends BroadcastReceiver {
             // Set the alarm to start at approximately 3:00 p.m.
             Calendar pmStart = Calendar.getInstance();
             pmStart.setTimeInMillis(System.currentTimeMillis());
-            pmStart.set(Calendar.HOUR_OF_DAY, 15);
+            pmStart.set(Calendar.HOUR_OF_DAY, 16);
+            pmStart.set(Calendar.MINUTE, 49);
             pmStartPendingIntent = PendingIntent.getBroadcast(context, PM_START, pmStartIntent, 0);
             alarmManager.setInexactRepeating(AlarmManager.RTC,
                     pmStart.getTimeInMillis(),
