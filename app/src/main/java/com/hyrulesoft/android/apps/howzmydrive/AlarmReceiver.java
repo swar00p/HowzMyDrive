@@ -1,43 +1,32 @@
 package com.hyrulesoft.android.apps.howzmydrive;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
 
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
-import com.google.maps.PendingResult;
-import com.google.maps.model.DirectionsLeg;
-import com.google.maps.model.DirectionsResult;
-import com.google.maps.model.DirectionsRoute;
-import com.google.maps.model.Duration;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
-
 public class AlarmReceiver extends BroadcastReceiver {
     public static final int CHECK_AM_COMMUTE = 0;
     public static final int CHECK_PM_COMMUTE = 1;
-    private ArrayList<PendingIntent> allPendingIntents = new ArrayList<PendingIntent>();
+    private ArrayList<PendingIntent> allPendingIntents = new ArrayList<>();
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO: This method is called when the BroadcastReceiver is receiving
-        // an Intent broadcast.
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent amIntent, pmIntent;
         PendingIntent amPendingIntent, pmPendingIntent;
+        DirectionsApiRequest apiRequest;
+        GeoApiContext geoApiContext = new GeoApiContext.Builder().apiKey("AIzaSyAD5wnOKi54M0ETlcpgbGGv6FoyzxTh1nU").build();
 
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         String homeAddressSaved = sp.getString(MainActivity.HOME_ADDRESS, null);
@@ -76,16 +65,20 @@ public class AlarmReceiver extends BroadcastReceiver {
                 //Calculate commute time from Home to Work
                 //Display notification with commute time
                 //https://maps.googleapis.com/maps/api/directions/json?origin=&destination=&key=
-                GeoApiContext geoApiContext = new GeoApiContext.Builder().apiKey("AIzaSyAD5wnOKi54M0ETlcpgbGGv6FoyzxTh1nU").build();
-                DirectionsApiRequest apiRequest = DirectionsApi.
+                apiRequest = DirectionsApi.
                         newRequest(geoApiContext).
                         origin(homeAddressSaved).
                         destination(workAddressSaved);
-                apiRequest.setCallback(new DirectionsCallback(context));
+                apiRequest.setCallback(new DirectionsCallback(context, "AM"));
                 break;
             case CHECK_PM_COMMUTE:
                 //Calculate commute time from Work to Home
                 //Display notification with commute time
+                apiRequest = DirectionsApi.
+                        newRequest(geoApiContext).
+                        origin(workAddressSaved).
+                        destination(homeAddressSaved);
+                apiRequest.setCallback(new DirectionsCallback(context, "PM"));
                 break;
         }
     }

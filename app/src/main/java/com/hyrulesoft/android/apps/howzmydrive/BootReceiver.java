@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
 
 import java.util.Calendar;
 
@@ -44,7 +43,7 @@ public class BootReceiver extends BroadcastReceiver {
             // Set the alarm to start at approximately 10:00 a.m.
             Calendar amEnd = Calendar.getInstance();
             amEnd.setTimeInMillis(System.currentTimeMillis());
-            amEnd.set(Calendar.HOUR_OF_DAY, 10);
+            amEnd.set(Calendar.HOUR_OF_DAY, 13);
             amEndPendingIntent = PendingIntent.getBroadcast(context, AM_END, amEndIntent, 0);
             alarmManager.setInexactRepeating(AlarmManager.RTC,
                     amEnd.getTimeInMillis(),
@@ -62,7 +61,7 @@ public class BootReceiver extends BroadcastReceiver {
             // Set the alarm to start at approximately 7:00 p.m.
             Calendar pmEnd = Calendar.getInstance();
             pmEnd.setTimeInMillis(System.currentTimeMillis());
-            pmEnd.set(Calendar.HOUR_OF_DAY, 19);
+            pmEnd.set(Calendar.HOUR_OF_DAY, 22);
             pmEndPendingIntent = PendingIntent.getBroadcast(context, PM_END, pmEndIntent, 0);
             alarmManager.setInexactRepeating(AlarmManager.RTC,
                     pmEnd.getTimeInMillis(),

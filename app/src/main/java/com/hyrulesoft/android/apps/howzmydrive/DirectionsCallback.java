@@ -1,43 +1,48 @@
 package com.hyrulesoft.android.apps.howzmydrive;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 
 import com.google.maps.PendingResult;
 import com.google.maps.model.DirectionsLeg;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
-
-/**
- * Created by backi on 2/28/2018.
- */
-
 public class DirectionsCallback implements PendingResult.Callback<DirectionsResult> {
-    Context context;
+    private Context context;
+    private String amOrPm;
+    private NotificationManager mNotificationManager;
 
-    public DirectionsCallback(Context context) {
+    public DirectionsCallback(Context context, String amOrPm) {
         this.context = context;
+        this.amOrPm = amOrPm;
+        mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     @Override
     public void onResult(DirectionsResult result) {
-        long amCommuteDuration=0, pmCommuteDuration=0;
+        long commuteDuration=0;
 
-        DirectionsRoute[] routes = result.routes;
-        for (int i=0; i<routes.length; i++) {
-            DirectionsLeg[] legs = routes[i].legs;
-            for (int j=0; j<legs.length; j++) {
-                amCommuteDuration += legs[j].duration.inSeconds;
+        if ("AM".equals(amOrPm)) {
+            DirectionsRoute[] routes = result.routes;
+            for (DirectionsRoute route : routes) {
+                DirectionsLeg[] legs = route.legs;
+                for (DirectionsLeg leg : legs) {
+                    commuteDuration += leg.duration.inSeconds;
+                }
+                showNotification(commuteDuration, "AM");
             }
-            showNotification(amCommuteDuration);
+        } else {
+            DirectionsRoute[] routes = result.routes;
+            for (DirectionsRoute route : routes) {
+                DirectionsLeg[] legs = route.legs;
+                for (DirectionsLeg leg : legs) {
+                    commuteDuration += leg.duration.inSeconds;
+                }
+                showNotification(commuteDuration, "PM");
+            }
         }
     }
 
@@ -46,22 +51,33 @@ public class DirectionsCallback implements PendingResult.Callback<DirectionsResu
 
     }
 
-    private void showNotification(long amCommuteDuration) {
-        PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this., MainActivity.class), 0);
+    private void showNotification(long commuteDuration, String amOrPm) {
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_stat_name)
+                .setContentTitle("HowzMyDrive")
+                .setContentText("Current " + amOrPm + " Commute: " + commuteDuration/60 + " min")
+                .setAutoCancel(true);
+
+        final Notification notification = builder.build();
+        mNotificationManager.notify(1, notification);
+    }
+
+    /*
+    private void showNotification(long commuteDuration, String amOrPm) {
+        PendingIntent pi = PendingIntent.getActivity(this.context, 0, new Intent(this.context, MainActivity.class), 0);
         Resources r = context.getResources();
-        Notification notification = new NotificationCompat.Builder()
-
-                /new NotificationCompat.Builder(context, "default");
-                .setTicker(r.getString(R.string.notification_title))
-                .setSmallIcon(android.R.drawable.ic_menu_report_image)
-                .setContentTitle(r.getString(R.string.notification_title))
-                .setContentText(r.getString(R.string.notification_text))
-                .setContentIntent(pi)
-                .setAutoCancel(true)
-                .build();*/
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notification);
+        NotificationChannel chan1 = new NotificationChannel(PRIMARY_CHANNEL,
+                context.getString(R.string.noti_channel_default), NotificationManager.IMPORTANCE_DEFAULT);
+        chan1.setLightColor(Color.GREEN);
+        chan1.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.createNotificationChannel(chan1);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context, PRIMARY_CHANNEL)
+                        .setContentTitle("HowzMyDrive")
+                        .setContentText("Current " + amOrPm + " Commute: " + commuteDuration/60 + " min")
+                        .setSmallIcon(R.drawable.ic_stat_name)
+                        .setAutoCancel(true);
     }
 
     private void initChannels(Context context) {
@@ -75,5 +91,5 @@ public class DirectionsCallback implements PendingResult.Callback<DirectionsResu
                 NotificationManager.IMPORTANCE_DEFAULT);
         channel.setDescription("Channel description");
         notificationManager.createNotificationChannel(channel);
-    }
+    }*/
 }
