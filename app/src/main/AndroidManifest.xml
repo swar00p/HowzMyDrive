@@ -22,6 +22,22 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAD5wnOKi54M0ETlcpgbGGv6FoyzxTh1nU" />
 
+        <meta-data
+            android:name="AM_START_TIME"
+            android:value="6" />
+
+        <meta-data
+            android:name="AM_END_TIME"
+            android:value="13" />
+
+        <meta-data
+            android:name="PM_START_TIME"
+            android:value="14" />
+
+        <meta-data
+            android:name="PM_END_TIME"
+            android:value="22" />
+
         <receiver
             android:name=".BootReceiver"
             android:enabled="true"
@@ -34,7 +50,28 @@
         <receiver
             android:name=".AlarmReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true">
+
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyAD5wnOKi54M0ETlcpgbGGv6FoyzxTh1nU" />
+
+            <meta-data
+                android:name="AM_START_TIME"
+                android:value="6" />
+
+            <meta-data
+                android:name="AM_END_TIME"
+                android:value="13" />
+
+            <meta-data
+                android:name="PM_START_TIME"
+                android:value="14" />
+
+            <meta-data
+                android:name="PM_END_TIME"
+                android:value="22" />
+        </receiver>
     </application>
 
 </manifest>
